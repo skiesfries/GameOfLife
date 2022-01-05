@@ -32,14 +32,12 @@ namespace GameOfLife
             // Setup the timer
             timer.Interval = 100; // milliseconds
             timer.Tick += Timer_Tick;
-            timer.Enabled = true; // start timer running
+            timer.Enabled = false; // start timer running
         }
 
         // Calculate the next generation of cells
         private void NextGeneration()
         {
-
-
             // Increment generation count
             generations++;
 
@@ -118,5 +116,11 @@ namespace GameOfLife
                 graphicsPanel1.Invalidate();
             }
         }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }
