@@ -13,7 +13,7 @@ namespace GameOfLife
     public partial class Form1 : Form
     {
         // The universe array
-        bool[,] universe = new bool[5, 5];
+        bool[,] universe = new bool[10, 10];
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -35,6 +35,91 @@ namespace GameOfLife
             timer.Enabled = false; // start timer running
         }
 
+        private int CountNeighborsFinite(int x, int y)
+        {
+            int count = 0;
+            int xLen = universe.GetLength(0);
+            int yLen = universe.GetLength(1);
+            for (int yOffset = -1; yOffset <= 1; yOffset++)
+            {
+                for (int xOffset = -1; xOffset <= 1; xOffset++)
+                {
+                    int xCheck = x + xOffset;
+                    int yCheck = y + yOffset;
+                    // if xOffset and yOffset are both equal to 0 then continue
+                    if (xOffset == 0 && yOffset == 0)
+                    {
+                        continue;
+                    }
+                    // if xCheck is less than 0 then continue
+                    if (xCheck < 0)
+                    {
+                        continue;
+                    }
+                    // if yCheck is less than 0 then continue
+                    if (yCheck < 0)
+                    {
+                        continue;
+                    }
+                    // if xCheck is greater than or equal too xLen then continue
+                    if (xCheck >= xLen)
+                    {
+                        continue;
+                    }
+                    // if yCheck is greater than or equal too yLen then continue
+                    if (yCheck >= yLen)
+                    {
+                        continue;
+                    }
+                    if (universe[xCheck, yCheck] == true) count++;
+                }
+            }
+            return count;
+        }
+
+        private int CountNeighborsToroidal(int x, int y)
+        {
+            int count = 0;
+            int xLen = universe.GetLength(0);
+            int yLen = universe.GetLength(1);
+            for (int yOffset = -1; yOffset <= 1; yOffset++)
+            {
+                for (int xOffset = -1; xOffset <= 1; xOffset++)
+                {
+                    int xCheck = x + xOffset;
+                    int yCheck = y + yOffset;
+                    // if xOffset and yOffset are both equal to 0 then continue
+                    if (xOffset == 0 && yOffset == 0)
+                    {
+                        continue;
+                    }
+                    // if xCheck is less than 0 then set to xLen - 1
+                    if (xCheck < 0)
+                    {
+                        xCheck = xLen - 1;
+                    }
+                    // if yCheck is less than 0 then set to yLen - 1
+                    if (yCheck < 0)
+                    {
+                        yCheck = yLen - 1;
+                    }
+                    // if xCheck is greater than or equal too xLen then set to 0
+                    if (xCheck >= xLen)
+                    {
+                        xCheck = 0;
+                    }
+                    // if yCheck is greater than or equal too yLen then set to 0
+                    if (yCheck >= yLen)
+                    {
+                        yCheck = 0;
+                    }
+
+                    if (universe[xCheck, yCheck] == true) count++;
+                }
+            }
+            return count;
+        }
+
         // Calculate the next generation of cells
         private void NextGeneration()
         {
@@ -53,11 +138,12 @@ namespace GameOfLife
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
+            //TODO: CHANGE MATH TO FLOATS INSTEAD OF INTS
             // Calculate the width and height of each cell in pixels
             // CELL WIDTH = WINDOW WIDTH / NUMBER OF CELLS IN X
-            int cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
+            float cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
             // CELL HEIGHT = WINDOW HEIGHT / NUMBER OF CELLS IN Y
-            int cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
+            float cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
 
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(gridColor, 1);
@@ -72,9 +158,9 @@ namespace GameOfLife
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
                     // A rectangle to represent each cell in pixels
-                    Rectangle cellRect = Rectangle.Empty;
-                    cellRect.X = x * cellWidth;
-                    cellRect.Y = y * cellHeight;
+                    RectangleF cellRect = RectangleF.Empty;
+                    cellRect.X = (float)x * cellWidth;
+                    cellRect.Y = (float)y * cellHeight;
                     cellRect.Width = cellWidth;
                     cellRect.Height = cellHeight;
 
@@ -96,6 +182,7 @@ namespace GameOfLife
 
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
+            //NEED TO CHANGE MATH HERE TO FLOATS TOO SOMEHOW
             // If the left mouse button was clicked
             if (e.Button == MouseButtons.Left)
             {
@@ -122,5 +209,9 @@ namespace GameOfLife
             this.Close();
         }
 
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
