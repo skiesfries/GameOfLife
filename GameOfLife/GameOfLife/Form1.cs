@@ -139,8 +139,18 @@ namespace GameOfLife
                     {
                         livingCells++;
                     }
+                    // set scratchpad and universe the same
                     scratchPad[x, y] = universe[x, y];
-                    var livingNeighbors = CountNeighborsFinite(x,y);
+                    // decide finite or toroidal for next gen
+                    int livingNeighbors;
+                    if (finiteCountToolStripMenuItem.Checked)
+                    {
+                        livingNeighbors = CountNeighborsFinite(x,y);
+                    }
+                    else
+                    {
+                        livingNeighbors = CountNeighborsToroidal(x,y);
+                    }
 
                     //Game of life rules
                     if (universe[x, y])
@@ -197,12 +207,11 @@ namespace GameOfLife
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
-            //TODO: CHANGE MATH TO FLOATS INSTEAD OF INTS
             // Calculate the width and height of each cell in pixels
             // CELL WIDTH = WINDOW WIDTH / NUMBER OF CELLS IN X
-            float cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
+            float cellWidth = graphicsPanel1.ClientSize.Width / (float)universe.GetLength(0);
             // CELL HEIGHT = WINDOW HEIGHT / NUMBER OF CELLS IN Y
-            float cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
+            float cellHeight = graphicsPanel1.ClientSize.Height / (float)universe.GetLength(1);
 
             
             // A Pen for drawing the grid lines (color, width)
@@ -219,21 +228,29 @@ namespace GameOfLife
                 {
                     // A rectangle to represent each cell in pixels
                     RectangleF cellRect = RectangleF.Empty;
-                    cellRect.X = (float)x * cellWidth;
-                    cellRect.Y = (float)y * cellHeight;
+                    cellRect.X = x * cellWidth;
+                    cellRect.Y = y * cellHeight;
                     cellRect.Width = cellWidth;
                     cellRect.Height = cellHeight;
-                    var liveNeighbors = CountNeighborsFinite(x, y);
+                    int livingNeighbors;
+                    if (finiteCountToolStripMenuItem.Checked)
+                    {
+                        livingNeighbors = CountNeighborsFinite(x, y);
+                    }
+                    else
+                    {
+                        livingNeighbors = CountNeighborsToroidal(x, y);
+                    }
 
                     // Fill the cell with a brush if alive
                     if (universe[x, y] == true)
                     {
                         e.Graphics.FillRectangle(cellBrush, cellRect);
-                        ShowNeighbors(liveNeighbors, e, cellRect, showNeighborCountToolStripMenuItem);
+                        ShowNeighbors(livingNeighbors, e, cellRect, showNeighborCountToolStripMenuItem);
                     }
-                    if (!universe[x,y] && liveNeighbors > 0 )
+                    if (!universe[x,y] && livingNeighbors > 0 )
                     {
-                        ShowNeighbors(liveNeighbors, e, cellRect, showNeighborhoodToolStripMenuItem);
+                        ShowNeighbors(livingNeighbors, e, cellRect, showNeighborhoodToolStripMenuItem);
                     }
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
@@ -247,22 +264,21 @@ namespace GameOfLife
 
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
-            //NEED TO CHANGE MATH HERE TO FLOATS TOO SOMEHOW
             // If the left mouse button was clicked
             if (e.Button == MouseButtons.Left)
             {
                 // Calculate the width and height of each cell in pixels
-                var cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
-                var cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
+                float cellWidth = graphicsPanel1.ClientSize.Width / (float)universe.GetLength(0);
+                float cellHeight = graphicsPanel1.ClientSize.Height / (float)universe.GetLength(1);
 
                 // Calculate the cell that was clicked in
                 // CELL X = MOUSE X / CELL WIDTH
-                var x = e.X / cellWidth;
+                float x = e.X / (float)cellWidth;
                 // CELL Y = MOUSE Y / CELL HEIGHT
-                var y = e.Y / cellHeight;
+                float y = e.Y / (float)cellHeight;
 
                 // Toggle the cell's state
-                universe[x, y] = !universe[x, y];
+                universe[(int)x, (int)y] = !universe[(int)x, (int)y];
 
                 // Tell Windows you need to repaint
                 graphicsPanel1.Invalidate();
@@ -312,6 +328,22 @@ namespace GameOfLife
 
         }
 
-       
+        private void finiteCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //toggle finite count in tool strip menu
+            finiteCountToolStripMenuItem.Checked = true;
+            toroidalCountToolStripMenuItem.Checked = false;
+
+            graphicsPanel1.Invalidate();
+        }
+
+        private void toroidalCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //toggle toroidal count in tool strip menu
+            toroidalCountToolStripMenuItem.Checked = true;
+            finiteCountToolStripMenuItem.Checked = false;
+
+            graphicsPanel1.Invalidate();
+        }
     }
 }
