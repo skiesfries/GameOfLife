@@ -246,10 +246,12 @@ namespace GameOfLife
                     if (universe[x, y] == true)
                     {
                         e.Graphics.FillRectangle(cellBrush, cellRect);
+                        //show neighbors on live cells
                         ShowNeighbors(livingNeighbors, e, cellRect, showNeighborCountToolStripMenuItem);
                     }
                     if (!universe[x,y] && livingNeighbors > 0 )
                     {
+                        //show moore's neighborhood
                         ShowNeighbors(livingNeighbors, e, cellRect, showNeighborhoodToolStripMenuItem);
                     }
                     // Outline the cell with a pen
@@ -323,11 +325,6 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
-        private void stepBackStripButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void finiteCountToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //toggle finite count in tool strip menu
@@ -345,5 +342,22 @@ namespace GameOfLife
 
             graphicsPanel1.Invalidate();
         }
+
+        private void newToolStripButton_Click(object sender, EventArgs e)
+        {
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    universe[x, y] = false;
+                }
+            }
+            generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            graphicsPanel1.Invalidate();
+        }
+
+       
     }
 }
