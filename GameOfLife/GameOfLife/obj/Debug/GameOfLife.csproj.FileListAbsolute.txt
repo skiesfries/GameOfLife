@@ -18,3 +18,4 @@ C:\Users\pupsf\Documents\Github\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameO
 C:\Users\pupsf\Documents\Github\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.csproj.CoreCompileInputs.cache
 C:\Users\pupsf\Documents\Github\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.exe
 C:\Users\pupsf\Documents\Github\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.pdb
+C:\Users\pupsf\Documents\Github\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.EnterSeed.resources

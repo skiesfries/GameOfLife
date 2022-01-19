@@ -185,6 +185,11 @@ namespace GameOfLife
 
             graphicsPanel1.Invalidate();
         }
+        private void GenerateRandomSeed()
+        {
+            Random randomSeed = new Random();
+            int rSeed = randomSeed.Next(-2147483647, 2147483647);
+        }
 
         private void ShowNeighbors(int livingNeighbors, PaintEventArgs e, RectangleF cellRect, ToolStripMenuItem toolStripIcon)
         {
@@ -358,6 +363,32 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
-       
+        private void enterSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EnterSeed enterSeedDialog = new EnterSeed();
+
+            if (DialogResult.OK == enterSeedDialog.ShowDialog())
+            {
+                Random randomSeed = new Random(enterSeedDialog.Seed);
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    for (int x = 0; x < universe.GetLength(0); x++)
+                    {
+                        var randomizeCellState = randomSeed.Next(0, 2);
+                        if (randomizeCellState == 0)
+                        {
+                            universe[x, y] = true;
+                        }
+                        else
+                        {
+                            universe[x, y] = false;
+                        }
+                    }
+                }
+            }
+
+            graphicsPanel1.Invalidate();
+
+        }
     }
 }
