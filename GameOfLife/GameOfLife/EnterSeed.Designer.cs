@@ -71,6 +71,7 @@ namespace GameOfLife
             this.Controls.Add(this.ConfirmButton);
             this.Controls.Add(this.enterSeedValue);
             this.Name = "EnterSeed";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter Seed";
             ((System.ComponentModel.ISupportInitialize)(this.enterSeedValue)).EndInit();
             this.ResumeLayout(false);

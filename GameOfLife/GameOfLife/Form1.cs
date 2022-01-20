@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -185,10 +186,11 @@ namespace GameOfLife
 
             graphicsPanel1.Invalidate();
         }
-        private void GenerateRandomSeed()
+        private int GenerateRandomSeed()
         {
             Random randomSeed = new Random();
             int rSeed = randomSeed.Next(-2147483647, 2147483647);
+            return rSeed;
         }
 
         private void ShowNeighbors(int livingNeighbors, PaintEventArgs e, RectangleF cellRect, ToolStripMenuItem toolStripIcon)
@@ -369,12 +371,12 @@ namespace GameOfLife
 
             if (DialogResult.OK == enterSeedDialog.ShowDialog())
             {
-                Random randomSeed = new Random(enterSeedDialog.Seed);
+                Random seed = new Random(enterSeedDialog.Seed);
                 for (int y = 0; y < universe.GetLength(1); y++)
                 {
                     for (int x = 0; x < universe.GetLength(0); x++)
                     {
-                        var randomizeCellState = randomSeed.Next(0, 2);
+                        var randomizeCellState = seed.Next(0, 2);
                         if (randomizeCellState == 0)
                         {
                             universe[x, y] = true;
@@ -386,8 +388,75 @@ namespace GameOfLife
                     }
                 }
             }
-
             graphicsPanel1.Invalidate();
+        }
+
+        private void randomSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int randomSeed = GenerateRandomSeed();
+            Random cellState = new Random(randomSeed);
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    var randomizeCellState = cellState.Next(0, 2);
+                    if (randomizeCellState == 0)
+                    {
+                        universe[x, y] = true;
+                    }
+                    else
+                    {
+                        universe[x, y] = false;
+                    }
+                }
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Random cellState  = new Random();
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    var randomizeCellState = cellState.Next(0, 2);
+                    if (randomizeCellState == 0)
+                    {
+                        universe[x, y] = true;
+                    }
+                    else
+                    {
+                        universe[x, y] = false;
+                    }
+                }
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var save = new SaveFileDialog();
+            save.Title = "Save cells";
+            save.Filter = "All Files|*.*|Cells|*.cells";
+            save.DefaultExt = "cells";
+
+            if (DialogResult.OK == save.ShowDialog())
+            {
+                StreamReader cellReader = new StreamReader(save.FileName);
+                int maximumWidth = 0;
+                int maximumHeight = 0;
+                int y = 0;
+
+                while (!cellReader.EndOfStream)
+                {
+                    string row = cellReader.ReadLine();
+                    if (row[0] == '!')
+                    {
+                        continue;
+                    }
+                }
+            }
 
         }
     }
