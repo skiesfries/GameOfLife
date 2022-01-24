@@ -42,6 +42,22 @@ namespace GameOfLife
             timer.Enabled = false; // start timer running
         }
 
+        private void NewUniverse(int width, int height)
+        {
+            bool[,] universe = new bool[width, height];
+            for (int w = 0; w < universe.GetLength(0); w++)
+                for (int h = 0; h < universe.GetLength(1); h++)
+                {
+                    universe[w, h] = false;
+                }
+            bool[,] scratchPad = new bool[width, height];
+            for (int w = 0; w < scratchPad.GetLength(0); w++)
+                for (int h = 0; h < scratchPad.GetLength(1); h++)
+                {
+                    scratchPad[w, h] = false;
+                }
+        }
+
         private int CountNeighborsFinite(int x, int y)
         {
             int neighborCount = 0;
@@ -434,16 +450,51 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void saveToolStripButton_Click(object sender, EventArgs e)
         {
-            var save = new SaveFileDialog();
-            save.Title = "Save cells";
+            SaveFileDialog save = new SaveFileDialog();
+            save.Title = "Save cells file";
             save.Filter = "All Files|*.*|Cells|*.cells";
+            save.FilterIndex = 2;
             save.DefaultExt = "cells";
 
             if (DialogResult.OK == save.ShowDialog())
             {
-                StreamReader cellReader = new StreamReader(save.FileName);
+                StreamWriter cellWriter = new StreamWriter(save.FileName);
+                cellWriter.Write("*Conway's Game of Life cell file - By Teresa Ortiz");
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    string row = string.Empty;
+                    cellWriter.WriteLine();
+                    for (int x = 0; x < universe.GetLength(0); x++)
+                    {
+                        if (universe[x, y] == true)
+                        {
+                            row = "O";
+                        }
+                        else
+                        {
+                            row = ".";
+                        }
+                        cellWriter.Write(row);
+                    }
+                }
+                cellWriter.Close();
+            }
+        }
+
+        private void openToolStripButton_Click(object sender, EventArgs e)
+        {
+            var open = new OpenFileDialog();
+            open.Title = "Open cells file";
+            open.Filter = "All Files|*.*|Cells|*.cells";
+            open.FilterIndex = 2;
+
+            //open cell file
+            if (DialogResult.OK == open.ShowDialog())
+            {
+                StreamReader cellReader = new StreamReader(open.FileName);
                 int maximumWidth = 0;
                 int maximumHeight = 0;
                 int y = 0;
@@ -451,12 +502,47 @@ namespace GameOfLife
                 while (!cellReader.EndOfStream)
                 {
                     string row = cellReader.ReadLine();
-                    if (row[0] == '!')
+                    maximumWidth = row.Length;
+                    if (row[0] == '*')
                     {
                         continue;
                     }
+
+                    if (row[0] != '*')
+                    {
+                        maximumHeight++;
+                    }
                 }
+
+                NewUniverse(maximumWidth, maximumHeight);
+                cellReader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                // read if cells are alive or dead in plain text file 
+                while (!cellReader.EndOfStream)
+                {
+                    string row = cellReader.ReadLine();
+                    if (row[0] == '*')
+                    {
+                        continue;
+                    }
+                    for (int x = 0; x < row.Length; x++)
+                    {
+                        
+                        if (row[x] == 'O')
+                        {
+                            universe[x, y] = true;
+                        }
+                        else
+                        {
+                            universe[x, y] = false;
+                        }
+                        y++;
+                    }
+                }
+                cellReader.Close();
+                graphicsPanel1.Invalidate();
             }
+
 
         }
     }
