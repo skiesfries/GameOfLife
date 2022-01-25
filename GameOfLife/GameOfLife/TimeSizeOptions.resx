@@ -117,40 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="Pause_grey_16x1" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAABESURBVDhPY/j//z9FGKsgKRiF8+3bt//EYGQ9GAY4OTnB
-        MUwDuhiynlEDRg0AYQwDiMHIelAMIAdjFSQFYxUkHv9nAAB7DO0vkYea7wAAAABJRU5ErkJggg==
-</value>
-  </data>
-  <data name="Run_16x" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACjSURBVDhPY0AG3759O//lyxcDKJd0ADTgPxC///79ewJU
-        iDQAMiBmXsT/ey/v/f/69ev89+/fC0CliAMgAyy6TP67THT4v/vKTpBrSPMSzAAY7t7ZSZqX0A0AYZK8
-        hM0AECbaS7gMgGGCXiJkQP3mWvIMAHlh/bm15HkBFIiXHl0iLxBBTn7+5jnp0Ui0k9EByACSnIwOQAYA
-        MUWZicTszMAAALt8KJbkBylnAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Pause_grey_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Pause_grey_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Pause_grey_16x2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Pause_grey_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PlayStep_16x" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACiSURBVDhPY/j27dt/IH7//fv3BAZyAMiAmHkR/++9vPf/
-        69ev86HCxAOQARZdJv9dJjr8331lJ8g154GuUYBKEwYwA2C4e2cn2EtA1wRAleAH6AbUb64lzwCQF9af
-        W4vVCyA1uDBYEhSIlx5dwhmIIDVOTk4YGG4AEOONRrwGoAOogRiYJAOwKcaGqWMAiEDH2BRjwyC1JNmI
-        jgeRAeTjb/8BXszXFkYc+EYAAAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="PlayStep_16x1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\PlayStep_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

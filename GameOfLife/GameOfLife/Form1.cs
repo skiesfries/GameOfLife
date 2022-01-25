@@ -15,9 +15,9 @@ namespace GameOfLife
     {
 
         // The universe array
-        bool[,] universe = new bool[30, 30];
+        bool[,] universe = new bool[3, 3];
 
-        bool[,] scratchPad = new bool[30, 30];
+        bool[,] scratchPad = new bool[3, 3];
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -31,6 +31,9 @@ namespace GameOfLife
 
         // Alive cells count
         int livingCells = 0;
+
+        //Show HUD
+        private bool DisplayHUD = true;
 
         public Form1()
         {
@@ -50,6 +53,7 @@ namespace GameOfLife
                 {
                     universe[w, h] = false;
                 }
+
             bool[,] scratchPad = new bool[width, height];
             for (int w = 0; w < scratchPad.GetLength(0); w++)
                 for (int h = 0; h < scratchPad.GetLength(1); h++)
@@ -162,11 +166,11 @@ namespace GameOfLife
                     int livingNeighbors;
                     if (finiteCountToolStripMenuItem.Checked)
                     {
-                        livingNeighbors = CountNeighborsFinite(x,y);
+                        livingNeighbors = CountNeighborsFinite(x, y);
                     }
                     else
                     {
-                        livingNeighbors = CountNeighborsToroidal(x,y);
+                        livingNeighbors = CountNeighborsToroidal(x, y);
                     }
 
                     //Game of life rules
@@ -188,7 +192,7 @@ namespace GameOfLife
                             scratchPad[x, y] = true;
                         }
                     }
-              
+
                 }
             }
             //swap universe and scratchpad for next gen
@@ -211,7 +215,7 @@ namespace GameOfLife
 
         private void ShowNeighbors(int livingNeighbors, PaintEventArgs e, RectangleF cellRect, ToolStripMenuItem toolStripIcon)
         {
-           
+
             var font = new Font("Arial", 8f);
             var stringFormat = new StringFormat();
             stringFormat.Alignment = StringAlignment.Center;
@@ -236,7 +240,7 @@ namespace GameOfLife
             // CELL HEIGHT = WINDOW HEIGHT / NUMBER OF CELLS IN Y
             float cellHeight = graphicsPanel1.ClientSize.Height / (float)universe.GetLength(1);
 
-            
+
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(gridColor, 1);
 
@@ -272,7 +276,7 @@ namespace GameOfLife
                         //show neighbors on live cells
                         ShowNeighbors(livingNeighbors, e, cellRect, showNeighborCountToolStripMenuItem);
                     }
-                    if (!universe[x,y] && livingNeighbors > 0 )
+                    if (!universe[x, y] && livingNeighbors > 0)
                     {
                         //show moore's neighborhood
                         ShowNeighbors(livingNeighbors, e, cellRect, showNeighborhoodToolStripMenuItem);
@@ -280,6 +284,20 @@ namespace GameOfLife
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
                 }
+            }
+            if (DisplayHUD)
+            {
+                string type = finiteCountToolStripMenuItem.Checked ? "Finite" : "Toroidal";
+                Font font = new Font("Arial", 15f);
+                StringFormat stringFormat = new StringFormat
+                {
+                    Alignment = StringAlignment.Far,
+                    LineAlignment = StringAlignment.Near
+                };
+                _ = new Rectangle(0, 0, 100, 100);
+                e.Graphics.DrawString(
+                    $@"Generations: {generations}{Environment.NewLine}Living Cells: {livingCells}{Environment.NewLine}Boundary Type: {type}{Environment.NewLine}Universe Size: (Width={universe.GetLength(0)}, Height={universe.GetLength(1)})",
+                    font, Brushes.CornflowerBlue, ClientRectangle, stringFormat);
             }
 
             // Cleaning up pens and brushes
@@ -431,7 +449,7 @@ namespace GameOfLife
 
         private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Random cellState  = new Random();
+            Random cellState = new Random();
             for (int y = 0; y < universe.GetLength(1); y++)
             {
                 for (int x = 0; x < universe.GetLength(0); x++)
@@ -462,11 +480,10 @@ namespace GameOfLife
             if (DialogResult.OK == save.ShowDialog())
             {
                 StreamWriter cellWriter = new StreamWriter(save.FileName);
-                cellWriter.Write("*Conway's Game of Life cell file - By Teresa Ortiz");
+                cellWriter.Write("!Conway's Game of Life cell file - By Teresa Ortiz");
                 for (int y = 0; y < universe.GetLength(1); y++)
                 {
                     string row = string.Empty;
-                    cellWriter.WriteLine();
                     for (int x = 0; x < universe.GetLength(0); x++)
                     {
                         if (universe[x, y] == true)
@@ -478,6 +495,7 @@ namespace GameOfLife
                             row = ".";
                         }
                         cellWriter.Write(row);
+                        cellWriter.WriteLine();
                     }
                 }
                 cellWriter.Close();
@@ -486,64 +504,76 @@ namespace GameOfLife
 
         private void openToolStripButton_Click(object sender, EventArgs e)
         {
-            var open = new OpenFileDialog();
-            open.Title = "Open cells file";
+            OpenFileDialog open = new OpenFileDialog();
             open.Filter = "All Files|*.*|Cells|*.cells";
             open.FilterIndex = 2;
 
-            //open cell file
             if (DialogResult.OK == open.ShowDialog())
             {
-                StreamReader cellReader = new StreamReader(open.FileName);
-                int maximumWidth = 0;
-                int maximumHeight = 0;
-                int y = 0;
+                StreamReader reader = new StreamReader(open.FileName);
 
-                while (!cellReader.EndOfStream)
+                int maxWidth = 0;
+                int maxHeight = 0;
+                int yPos = 0;
+
+                // Iterate through the file once to get its size.
+                while (!reader.EndOfStream)
                 {
-                    string row = cellReader.ReadLine();
-                    maximumWidth = row.Length;
-                    if (row[0] == '*')
+                    string row = reader.ReadLine();
+                    if (row[0] == '!')
+                    {
+                        continue;
+                    }
+                    // If the row is not a comment then it is a row of cells.
+                    // Increment the maxHeight variable for each row read.
+                    if (row[0] != '!')
+                    {
+                        maxHeight++;
+                    }
+                    maxWidth = row.Length;
+                }
+             
+                NewUniverse(maxWidth, maxHeight);
+                reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                while (!reader.EndOfStream)
+                {
+                    string row = reader.ReadLine();
+
+                    if (row[0] == '!')
                     {
                         continue;
                     }
 
-                    if (row[0] != '*')
+                    for (int xPos = 0; xPos < row.Length; xPos++)
                     {
-                        maximumHeight++;
+                        if (row[xPos] == 'O')
+                        {
+                            universe[xPos, yPos] = true;
+                        }
+
+                        if (row[xPos] == '.')
+                        {
+                            universe[xPos, yPos] = false;
+                        }
                     }
                 }
-
-                NewUniverse(maximumWidth, maximumHeight);
-                cellReader.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                // read if cells are alive or dead in plain text file 
-                while (!cellReader.EndOfStream)
-                {
-                    string row = cellReader.ReadLine();
-                    if (row[0] == '*')
-                    {
-                        continue;
-                    }
-                    for (int x = 0; x < row.Length; x++)
-                    {
-                        
-                        if (row[x] == 'O')
-                        {
-                            universe[x, y] = true;
-                        }
-                        else
-                        {
-                            universe[x, y] = false;
-                        }
-                        y++;
-                    }
-                }
-                cellReader.Close();
-                graphicsPanel1.Invalidate();
+                reader.Close();
             }
+            graphicsPanel1.Invalidate();
+        }
 
-
+        private void ShowHUDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!ShowHUDToolStripMenuItem.Checked)
+            {
+                DisplayHUD = false;
+            }
+            else
+            {
+                DisplayHUD = true;
+            }
+            graphicsPanel1.Invalidate();
         }
     }
 }
