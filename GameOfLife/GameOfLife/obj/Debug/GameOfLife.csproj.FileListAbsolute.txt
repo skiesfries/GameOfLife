@@ -31,3 +31,4 @@ C:\Users\Sky\Documents\GitHub\GameOfLife\GameOfLife\GameOfLife\bin\Debug\GameOfL
 C:\Users\Sky\Documents\GitHub\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.Properties.Resources.resources
 C:\Users\Sky\Documents\GitHub\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.csproj.CoreCompileInputs.cache
 C:\Users\Sky\Documents\GitHub\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.TimeSizeOptions.resources
+C:\Users\Sky\Documents\GitHub\GameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.Help.resources

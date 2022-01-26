@@ -47,6 +47,7 @@ namespace GameOfLife
             DefaultSettings();
         }
 
+        //Creates a new universe and scratchpad 
         private void NewUniverse(int width, int height)
         {
             universe = new bool[width, height];
@@ -62,8 +63,6 @@ namespace GameOfLife
                 {
                     scratchPad[w, h] = false;
                 }
-            
-            graphicsPanel1.Invalidate();
         }
 
         private int CountNeighborsFinite(int x, int y)
@@ -296,7 +295,7 @@ namespace GameOfLife
             if (DisplayHUD)
             {
                 string type = finiteCountToolStripMenuItem.Checked ? "Finite" : "Toroidal";
-                Font font = new Font("Arial", 15f);
+                Font font = new Font("Arial", 14f);
                 StringFormat stringFormat = new StringFormat
                 {
                     Alignment = StringAlignment.Far,
@@ -348,46 +347,30 @@ namespace GameOfLife
 
             graphicsPanel1.Invalidate();
         }
-
+        // exit the program
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            for (int y = 0; y < universe.GetLength(1); y++)
-            {
-                // Iterate through the universe in the x, left to right
-                for (int x = 0; x < universe.GetLength(0); x++)
-                {
-                    universe[x, y] = false;
-                }
-            }
-            generations = 0;
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
-            toolStripStatusLabelLivingCells.Text = "Living Cells = " + livingCells.ToString();
-            graphicsPanel1.Invalidate();
-        }
-
+        //play gol
         private void playToolStripButton_Click(object sender, EventArgs e)
         {
             timer.Enabled = true;
             graphicsPanel1.Invalidate();
         }
-
+        //pause gol
         private void pauseToolStripButton_Click(object sender, EventArgs e)
         {
             timer.Enabled = false;
             graphicsPanel1.Invalidate();
         }
-
+        //step through one generation at a time
         private void nextStepToolStripButton_Click(object sender, EventArgs e)
         {
             NextGeneration();
             graphicsPanel1.Invalidate();
         }
-
+        
         private void finiteCountToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //toggle finite count in tool strip menu
@@ -405,7 +388,7 @@ namespace GameOfLife
 
             graphicsPanel1.Invalidate();
         }
-
+        // new button
         private void newToolStripButton_Click(object sender, EventArgs e)
         {
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -421,7 +404,7 @@ namespace GameOfLife
             toolStripStatusLabelLivingCells.Text = "Living Cells = " + livingCells.ToString();
             graphicsPanel1.Invalidate();
         }
-
+        //enter seed to randomize
         private void enterSeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EnterSeed enterSeedDialog = new EnterSeed();
@@ -447,7 +430,7 @@ namespace GameOfLife
             }
             graphicsPanel1.Invalidate();
         }
-
+        //random seed
         private void randomSeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int randomSeed = GenerateRandomSeed();
@@ -469,7 +452,7 @@ namespace GameOfLife
             }
             graphicsPanel1.Invalidate();
         }
-
+        // randomize from time
         private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Random cellState = new Random();
@@ -491,7 +474,7 @@ namespace GameOfLife
             graphicsPanel1.Invalidate();
         }
 
-
+        //save cell file
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog save = new SaveFileDialog();
@@ -507,6 +490,7 @@ namespace GameOfLife
                 for (int y = 0; y < universe.GetLength(1); y++)
                 {
                     string row = string.Empty;
+                    cellWriter.WriteLine();
                     for (int x = 0; x < universe.GetLength(0); x++)
                     {
                         if (universe[x, y] == true)
@@ -518,13 +502,13 @@ namespace GameOfLife
                             row = ".";
                         }
                         cellWriter.Write(row);
-                        cellWriter.WriteLine();
+                        
                     }
                 }
                 cellWriter.Close();
             }
         }
-
+        //open cell file
         private void openToolStripButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog open = new OpenFileDialog();
@@ -590,7 +574,7 @@ namespace GameOfLife
             }
             
         }
-
+        //Toggle HUD
         private void ShowHUDToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!ShowHUDToolStripMenuItem.Checked)
@@ -603,7 +587,7 @@ namespace GameOfLife
             }
             graphicsPanel1.Invalidate();
         }
-
+        // options box for changing universe size and time interval
         private void editUniverseSizeTimerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TimeSizeOptions timeSizeOptions = new TimeSizeOptions();
@@ -624,29 +608,35 @@ namespace GameOfLife
             NewUniverse(universeWidth, universeHeight);
             graphicsPanel1.Invalidate();
         }
-
+        //reset settings to default
         private void resetSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Settings.Default.Reset();
             DefaultSettings();
         }
-
+        //reload settings
         private void reloadSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Settings.Default.Reload();
             DefaultSettings();
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Settings.Default.Save();
-        }
-
+       
+        //toggle grid
         private void showGridToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (showGridToolStripMenuItem.Checked)
+            {
+                showGridToolStripMenuItem.Checked = false;
+            }
+            else if (!showGridToolStripMenuItem.Checked)
+            {
+                showGridToolStripMenuItem.Checked = true;
+            }
+           
             graphicsPanel1.Invalidate();
         }
-
+        //change background color
         private void editBackgroundColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ColorDialog background = new ColorDialog();
@@ -659,7 +649,7 @@ namespace GameOfLife
                 graphicsPanel1.Invalidate();
             }
         }
-
+        //change cell color
         private void editCellColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ColorDialog cell = new ColorDialog();
@@ -671,7 +661,7 @@ namespace GameOfLife
                 graphicsPanel1.Invalidate();
             }
         }
-
+        //change grid color
         private void editGridColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ColorDialog grid = new ColorDialog();
@@ -681,6 +671,47 @@ namespace GameOfLife
                 gridColor = grid.Color;
                 Settings.Default.GridColor = grid.Color;
                 graphicsPanel1.Invalidate();
+            }
+        }
+        //save settings when form closes
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.Default.Save();
+        }
+        //toggle moore's neighborhood
+        private void showNeighborhoodToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!showNeighborhoodToolStripMenuItem.Checked)
+            {
+                showNeighborhoodToolStripMenuItem.Checked = true;
+            }
+            else
+            {
+                showNeighborhoodToolStripMenuItem.Checked = false;
+            }
+            
+            graphicsPanel1.Invalidate();
+        }
+        //toggle neighbor count
+        private void showNeighborCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!showNeighborCountToolStripMenuItem.Checked)
+            {
+                showNeighborCountToolStripMenuItem.Checked = true;
+            }
+            else
+            {
+                showNeighborCountToolStripMenuItem.Checked = false;
+            }
+            graphicsPanel1.Invalidate();
+        }
+        //show rules of game of life
+        private void helpToolStripButton_Click(object sender, EventArgs e)
+        {
+            Help help = new Help();
+            if (DialogResult.OK != help.ShowDialog())
+            {
+                return;
             }
         }
     }
