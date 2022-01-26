@@ -19,5 +19,10 @@ namespace GameOfLife
             // Allow repainting when the window is resized.
             this.SetStyle(ControlStyles.ResizeRedraw, true);
         }
+        private void InitializeComponent()
+        {
+            SuspendLayout();
+            ResumeLayout(false);
+        }
     }
 }

@@ -25,5 +25,110 @@ namespace GameOfLife.Properties
                 return defaultInstance;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int UniverseWidth
+        {
+            get
+            {
+                return ((int)(this["UniverseWidth"]));
+            }
+            set
+            {
+                this["UniverseWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int UniverseHeight
+        {
+            get
+            {
+                return ((int)(this["UniverseHeight"]));
+            }
+            set
+            {
+                this["UniverseHeight"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int Milliseconds
+        {
+            get
+            {
+                return ((int)(this["Milliseconds"]));
+            }
+            set
+            {
+                this["Milliseconds"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color GridColor
+        {
+            get
+            {
+                return ((global::System.Drawing.Color)(this["GridColor"]));
+            }
+            set
+            {
+                this["GridColor"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color CellColor
+        {
+            get
+            {
+                return ((global::System.Drawing.Color)(this["CellColor"]));
+            }
+            set
+            {
+                this["CellColor"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color BackgroundColor
+        {
+            get
+            {
+                return ((global::System.Drawing.Color)(this["BackgroundColor"]));
+            }
+            set
+            {
+                this["BackgroundColor"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Toroidal
+        {
+            get
+            {
+                return ((bool)(this["Toroidal"]));
+            }
+            set
+            {
+                this["Toroidal"] = value;
+            }
+        }
     }
 }

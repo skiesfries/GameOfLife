@@ -73,39 +73,9 @@ namespace GameOfLife.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Pause_grey_16x1 {
-            get {
-                object obj = ResourceManager.GetObject("Pause_grey_16x1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Pause_grey_16x2 {
-            get {
-                object obj = ResourceManager.GetObject("Pause_grey_16x2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap PlayStep_16x {
             get {
                 object obj = ResourceManager.GetObject("PlayStep_16x", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap PlayStep_16x1 {
-            get {
-                object obj = ResourceManager.GetObject("PlayStep_16x1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -102,25 +102,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PlayStep_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PlayStep_16x1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Pause_grey_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\StepBack.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Run_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Icons\Pause_grey_16x.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icons\PlayStep_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\Run_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

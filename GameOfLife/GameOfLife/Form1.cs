@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameOfLife.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,9 +16,9 @@ namespace GameOfLife
     {
 
         // The universe array
-        bool[,] universe = new bool[3, 3];
+        bool[,] universe = new bool[30, 30];
 
-        bool[,] scratchPad = new bool[3, 3];
+        bool[,] scratchPad = new bool[30, 30];
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -43,23 +44,26 @@ namespace GameOfLife
             timer.Interval = 100; // milliseconds
             timer.Tick += Timer_Tick;
             timer.Enabled = false; // start timer running
+            DefaultSettings();
         }
 
         private void NewUniverse(int width, int height)
         {
-            bool[,] universe = new bool[width, height];
+            universe = new bool[width, height];
             for (int w = 0; w < universe.GetLength(0); w++)
                 for (int h = 0; h < universe.GetLength(1); h++)
                 {
                     universe[w, h] = false;
                 }
 
-            bool[,] scratchPad = new bool[width, height];
+            scratchPad = new bool[width, height];
             for (int w = 0; w < scratchPad.GetLength(0); w++)
                 for (int h = 0; h < scratchPad.GetLength(1); h++)
                 {
                     scratchPad[w, h] = false;
                 }
+            
+            graphicsPanel1.Invalidate();
         }
 
         private int CountNeighborsFinite(int x, int y)
@@ -203,7 +207,7 @@ namespace GameOfLife
             generations++;
             // Update status strip generations
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
-
+            toolStripStatusLabelLivingCells.Text = "Living Cells = " + livingCells.ToString();
             graphicsPanel1.Invalidate();
         }
         private int GenerateRandomSeed()
@@ -281,8 +285,12 @@ namespace GameOfLife
                         //show moore's neighborhood
                         ShowNeighbors(livingNeighbors, e, cellRect, showNeighborhoodToolStripMenuItem);
                     }
-                    // Outline the cell with a pen
-                    e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    // Toggle grid
+                    if (showGridToolStripMenuItem.Checked)
+                    {
+                        e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    }
+                    
                 }
             }
             if (DisplayHUD)
@@ -297,7 +305,7 @@ namespace GameOfLife
                 _ = new Rectangle(0, 0, 100, 100);
                 e.Graphics.DrawString(
                     $@"Generations: {generations}{Environment.NewLine}Living Cells: {livingCells}{Environment.NewLine}Boundary Type: {type}{Environment.NewLine}Universe Size: (Width={universe.GetLength(0)}, Height={universe.GetLength(1)})",
-                    font, Brushes.CornflowerBlue, ClientRectangle, stringFormat);
+                    font, Brushes.DarkGreen, ClientRectangle, stringFormat);
             }
 
             // Cleaning up pens and brushes
@@ -328,6 +336,19 @@ namespace GameOfLife
             }
         }
 
+        private void DefaultSettings()
+        {
+            graphicsPanel1.BackColor = Settings.Default.BackgroundColor;
+            cellColor = Settings.Default.CellColor;
+            gridColor = Settings.Default.GridColor;
+            NewUniverse(Settings.Default.UniverseWidth, Settings.Default.UniverseHeight);
+            timer.Interval = Settings.Default.Milliseconds;
+            toroidalCountToolStripMenuItem.Checked = Settings.Default.Toroidal;
+            finiteCountToolStripMenuItem.Checked = !Settings.Default.Toroidal;
+
+            graphicsPanel1.Invalidate();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -345,6 +366,7 @@ namespace GameOfLife
             }
             generations = 0;
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            toolStripStatusLabelLivingCells.Text = "Living Cells = " + livingCells.ToString();
             graphicsPanel1.Invalidate();
         }
 
@@ -396,6 +418,7 @@ namespace GameOfLife
             }
             generations = 0;
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            toolStripStatusLabelLivingCells.Text = "Living Cells = " + livingCells.ToString();
             graphicsPanel1.Invalidate();
         }
 
@@ -515,6 +538,8 @@ namespace GameOfLife
                 int maxWidth = 0;
                 int maxHeight = 0;
                 int yPos = 0;
+                //int rowCount = 0;
+
 
                 // Iterate through the file once to get its size.
                 while (!reader.EndOfStream)
@@ -552,15 +577,18 @@ namespace GameOfLife
                             universe[xPos, yPos] = true;
                         }
 
-                        if (row[xPos] == '.')
+                        else if (row[xPos] == '.')
                         {
                             universe[xPos, yPos] = false;
                         }
+                        
                     }
+                    yPos++;
                 }
                 reader.Close();
+                graphicsPanel1.Invalidate();
             }
-            graphicsPanel1.Invalidate();
+            
         }
 
         private void ShowHUDToolStripMenuItem_Click(object sender, EventArgs e)
@@ -574,6 +602,86 @@ namespace GameOfLife
                 DisplayHUD = true;
             }
             graphicsPanel1.Invalidate();
+        }
+
+        private void editUniverseSizeTimerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TimeSizeOptions timeSizeOptions = new TimeSizeOptions();
+            if (DialogResult.OK != timeSizeOptions.ShowDialog())
+            {
+                return;
+            }
+
+            int milliseconds = timeSizeOptions.Milliseconds;
+            int universeWidth = timeSizeOptions.UniverseWidth;
+            int universeHeight = timeSizeOptions.UniverseHeight;
+            timer.Interval = milliseconds;
+
+            Settings.Default.UniverseWidth = universeWidth;
+            Settings.Default.UniverseHeight = universeHeight;
+            Settings.Default.Milliseconds = milliseconds;
+
+            NewUniverse(universeWidth, universeHeight);
+            graphicsPanel1.Invalidate();
+        }
+
+        private void resetSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings.Default.Reset();
+            DefaultSettings();
+        }
+
+        private void reloadSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Settings.Default.Reload();
+            DefaultSettings();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.Default.Save();
+        }
+
+        private void showGridToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            graphicsPanel1.Invalidate();
+        }
+
+        private void editBackgroundColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog background = new ColorDialog();
+            background.Color = graphicsPanel1.BackColor;
+            if (DialogResult.OK == background.ShowDialog())
+            {
+                graphicsPanel1.BackColor = background.Color;
+
+                Settings.Default.BackgroundColor = background.Color;
+                graphicsPanel1.Invalidate();
+            }
+        }
+
+        private void editCellColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog cell = new ColorDialog();
+            cell.Color = this.cellColor;
+            if (DialogResult.OK == cell.ShowDialog())
+            {
+                cellColor = cell.Color;
+                Settings.Default.CellColor = cell.Color;
+                graphicsPanel1.Invalidate();
+            }
+        }
+
+        private void editGridColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog grid = new ColorDialog();
+            grid.Color = gridColor;
+            if (DialogResult.OK == grid.ShowDialog())
+            {
+                gridColor = grid.Color;
+                Settings.Default.GridColor = grid.Color;
+                graphicsPanel1.Invalidate();
+            }
         }
     }
 }

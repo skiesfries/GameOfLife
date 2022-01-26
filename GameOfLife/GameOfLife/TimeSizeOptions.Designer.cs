@@ -29,48 +29,40 @@ namespace GameOfLife
         /// </summary>
         private void InitializeComponent()
         {
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.button1 = new System.Windows.Forms.Button();
+            this.GenerationTimeInterval = new System.Windows.Forms.NumericUpDown();
+            this.Confirm = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            this.Cancel = new System.Windows.Forms.Button();
+            this.UWidth = new System.Windows.Forms.NumericUpDown();
+            this.UHeight = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.GenerationTimeInterval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UHeight)).BeginInit();
             this.SuspendLayout();
             // 
-            // numericUpDown1
+            // GenerationTimeInterval
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(237, 54);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(102, 22);
-            this.numericUpDown1.TabIndex = 0;
+            this.GenerationTimeInterval.Location = new System.Drawing.Point(237, 54);
+            this.GenerationTimeInterval.Name = "GenerationTimeInterval";
+            this.GenerationTimeInterval.Size = new System.Drawing.Size(102, 22);
+            this.GenerationTimeInterval.TabIndex = 0;
+            this.GenerationTimeInterval.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             // 
-            // numericUpDown2
+            // Confirm
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(127, 131);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(109, 22);
-            this.numericUpDown2.TabIndex = 1;
-            // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.Location = new System.Drawing.Point(127, 204);
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(109, 22);
-            this.numericUpDown3.TabIndex = 2;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(34, 268);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 42);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Confirm";
-            this.button1.UseVisualStyleBackColor = true;
+            this.Confirm.Location = new System.Drawing.Point(34, 268);
+            this.Confirm.Name = "Confirm";
+            this.Confirm.Size = new System.Drawing.Size(128, 42);
+            this.Confirm.TabIndex = 3;
+            this.Confirm.Text = "Confirm";
+            this.Confirm.UseVisualStyleBackColor = true;
+            this.Confirm.Click += new System.EventHandler(this.Confirm_Click);
             // 
             // label1
             // 
@@ -99,33 +91,58 @@ namespace GameOfLife
             this.label3.TabIndex = 6;
             this.label3.Text = "Universe Height";
             // 
-            // button2
+            // Cancel
             // 
-            this.button2.Location = new System.Drawing.Point(190, 268);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(130, 42);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
+            this.Cancel.Location = new System.Drawing.Point(190, 268);
+            this.Cancel.Name = "Cancel";
+            this.Cancel.Size = new System.Drawing.Size(130, 42);
+            this.Cancel.TabIndex = 7;
+            this.Cancel.Text = "Cancel";
+            this.Cancel.UseVisualStyleBackColor = true;
+            this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
+            // 
+            // UWidth
+            // 
+            this.UWidth.Location = new System.Drawing.Point(129, 131);
+            this.UWidth.Name = "UWidth";
+            this.UWidth.Size = new System.Drawing.Size(102, 22);
+            this.UWidth.TabIndex = 8;
+            this.UWidth.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            // 
+            // UHeight
+            // 
+            this.UHeight.Location = new System.Drawing.Point(129, 204);
+            this.UHeight.Name = "UHeight";
+            this.UHeight.Size = new System.Drawing.Size(102, 22);
+            this.UHeight.TabIndex = 9;
+            this.UHeight.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
             // 
             // TimeSizeOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(363, 322);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.UHeight);
+            this.Controls.Add(this.UWidth);
+            this.Controls.Add(this.Cancel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.numericUpDown3);
-            this.Controls.Add(this.numericUpDown2);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.Confirm);
+            this.Controls.Add(this.GenerationTimeInterval);
             this.Name = "TimeSizeOptions";
             this.Text = "Universe Time/Size";
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GenerationTimeInterval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UHeight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -133,13 +150,13 @@ namespace GameOfLife
 
         #endregion
 
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.NumericUpDown GenerationTimeInterval;
+        private System.Windows.Forms.Button Confirm;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button Cancel;
+        private System.Windows.Forms.NumericUpDown UWidth;
+        private System.Windows.Forms.NumericUpDown UHeight;
     }
 }
